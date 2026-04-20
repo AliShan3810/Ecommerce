@@ -1,45 +1,35 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { enableScreens } from 'react-native-screens';
+import { NativeBaseProvider } from 'native-base';
+import { StatusBar, useColorScheme, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SimpleTopToastProvider } from './src/components/SimpleTopToast';
+import { CartProvider } from './src/context/CartContext';
+import { AppNavigator } from './src/navigation/AppNavigator';
+import { appTheme } from './src/theme/nativeBaseTheme';
+
+enableScreens(true);
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <NativeBaseProvider theme={appTheme}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <SimpleTopToastProvider>
+          <CartProvider>
+            <View style={{ flex: 1 }}>
+              <AppNavigator />
+            </View>
+          </CartProvider>
+        </SimpleTopToastProvider>
+      </NativeBaseProvider>
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
